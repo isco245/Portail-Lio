@@ -1,0 +1,31 @@
+DÉPLOIEMENT SUR NETLIFY
+========================
+
+1. Mettez ce dossier sur GitHub (nécessaire car Netlify doit installer
+   la dépendance listée dans package.json) :
+     git init
+     git add .
+     git commit -m "Premier déploiement"
+     git branch -M main
+     git remote add origin https://github.com/VOTRE-PSEUDO/VOTRE-DEPOT.git
+     git push -u origin main
+
+2. Sur netlify.com : "Add new site" -> "Import an existing project"
+   -> GitHub -> sélectionner le dépôt.
+   Netlify détecte automatiquement netlify.toml (publish = public,
+   functions = netlify/functions). Cliquez "Deploy site".
+
+3. Dans Site configuration -> Environment variables, ajoutez :
+     SESSION_SECRET    = une longue chaîne aléatoire (40+ caractères)
+     ADMIN_MATRICULE   = matricule du compte exploitant, ex: ADMIN01
+     ADMIN_PASSWORD    = mot de passe initial (6 caractères minimum)
+
+4. Retournez dans Deploys -> Trigger deploy -> Deploy site
+   (pour que les variables soient prises en compte).
+
+5. Ouvrez l'URL du site et connectez-vous avec ADMIN_MATRICULE /
+   ADMIN_PASSWORD. Le compte exploitant est créé automatiquement au
+   premier login. Créez ensuite les comptes conducteurs depuis le
+   tableau de bord admin.
+
+6. Pensez à changer le mot de passe de l'exploitant une fois connecté.
