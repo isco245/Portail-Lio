@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Espace exploitant – Note de service</title>
+  <meta name="theme-color" content="#c10130">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preload" href="fonts/outfit-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-no-note="1">
+  <header>
+    <a class="brand" href="admin.html">
+      <img src="img/lio-rouge.png" alt="liO" width="325" height="181">
+      <span>Espace exploitant</span>
+    </a>
+    <nav id="nav" data-page="note"></nav>
+  </header>
+  <main class="page">
+    <section class="card">
+      <h2>Note de service</h2>
+      <p>La note est affichée en haut de toutes les pages, pour les conducteurs comme pour les exploitants. Il n'y en a qu'une à la fois : en publier une nouvelle remplace l'ancienne.</p>
+      <div id="actuelle" hidden>
+        <p class="muted">Note actuellement publiée :</p>
+        <div id="apercu"></div>
+        <div class="actions"><button type="button" class="danger" id="bSupprimer">Supprimer la note</button></div>
+      </div>
+      <p id="aucune" class="vide">Aucune note n'est publiée.</p>
+    </section>
+    <section class="card">
+      <h3 id="formTitre">Publier une note</h3>
+      <form id="f">
+        <label>Type
+          <select name="type" class="note-type">
+            <option value="information">Information</option>
+            <option value="attention">Attention</option>
+            <option value="perturbation">Perturbation</option>
+            <option value="danger">Danger</option>
+          </select>
+        </label>
+        <label>Message
+          <textarea name="texte" rows="5" maxlength="1000" required></textarea>
+        </label>
+        <p id="msg" role="status"></p>
+        <button>Publier la note</button>
+      </form>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="img/lio-bleu.png" width="743" height="262" loading="lazy" decoding="async" alt="liO – Service public Occitanie Transports">
+      </div>
+      <div class="footer-text">
+        <h2>Informations légales</h2>
+        <ul>
+          <li><a href="mentions-legales.html#mentions">Mentions légales</a></li>
+          <li><a href="mentions-legales.html#donnees">Données personnelles</a></li>
+          <li><a href="mentions-legales.html#stockage">Cookies et stockage</a></li>
+          <li><a href="mentions-legales.html#cgu">Conditions générales d'utilisation</a></li>
+        </ul>
+        <p>Espace réservé aux conducteurs et exploitants de la communauté. Ce site est un projet de jeu de rôle sur Roblox : il n'est ni le site officiel du réseau liO, ni affilié à la Région Occitanie, à Occitanie Transports ou à Roblox Corporation.</p>
+        <p>Le nom et le logo liO appartiennent à leurs propriétaires et sont utilisés ici à titre illustratif.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Espace conducteurs. Tous droits réservés.</span>
+      <span>Hébergé par Netlify, Inc.</span>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+  <script src="js/note.js"></script>
+</body>
+</html>
