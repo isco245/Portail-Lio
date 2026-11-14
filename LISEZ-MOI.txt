@@ -1,0 +1,90 @@
+DÉPLOIEMENT SUR NETLIFY
+========================
+
+1. Mettez ce dossier sur GitHub (nécessaire car Netlify doit installer
+   la dépendance listée dans package.json). Ne versionnez PAS node_modules :
+     git init
+     git add .
+     git commit -m "Déploiement"
+     git branch -M main
+     git remote add origin https://github.com/VOTRE-PSEUDO/VOTRE-DEPOT.git
+     git push -u origin main
+
+2. Sur netlify.com : "Add new site" -> "Import an existing project"
+   -> GitHub -> sélectionner le dépôt.
+   Netlify détecte automatiquement netlify.toml (publish = public,
+   functions = netlify/functions, en-têtes de sécurité). Cliquez "Deploy site".
+
+3. Dans Site configuration -> Environment variables, ajoutez :
+     SESSION_SECRET    = chaîne aléatoire d'AU MOINS 32 caractères
+                         (sans elle, le site refuse de démarrer)
+     ADMIN_MATRICULE   = matricule du compte exploitant, ex: ADMIN01
+     ADMIN_PASSWORD    = mot de passe initial (8 caractères minimum)
+
+4. Retournez dans Deploys -> Trigger deploy -> Deploy site
+   (pour que les variables soient prises en compte).
+
+5. Ouvrez l'URL du site et connectez-vous avec ADMIN_MATRICULE /
+   ADMIN_PASSWORD. Le compte exploitant est créé automatiquement au
+   premier login.
+
+6. Avant d'ouvrir aux conducteurs :
+   - Espace exploitant -> Lignes : ajoutez les lignes (avec leur couleur) que
+     les conducteurs pourront choisir. Tant que la liste est vide, aucun rapport ne peut
+     être envoyé.
+   - Espace exploitant -> Conducteurs : créez les comptes.
+   - Changez le mot de passe de l'exploitant (Conducteurs -> votre compte
+     -> Modifier). Vous serez déconnecté, c'est normal.
+   - Espace exploitant -> Véhicules : ajoutez les véhicules (les conducteurs
+     les activent ensuite et saisissent leur plaque).
+
+FONCTIONNEMENT
+==============
+- Récap exploitant : compteurs du mois en cours (ils repartent à zéro le
+  1er de chaque mois, fuseau Europe/Paris) + tableau des 3 mois précédents.
+- Profil conducteur (exploitant) : mois en cours, cumul depuis le début,
+  3 derniers mois, lignes conduites, 20 derniers services.
+- Rapports de service : les conducteurs ET les exploitants peuvent en envoyer
+  (menu « Rapport de service »). En cas d'accident, le type (routier, voyageur
+  ou externe) et la description sont obligatoires.
+- Lignes : chaque ligne a une couleur, modifiable à tout moment depuis la
+  page Lignes (cliquer sur la pastille de couleur à côté de la ligne).
+- Note de service : une seule à la fois, publiée depuis Espace exploitant ->
+  Note de service (type : information, attention, perturbation, danger).
+  Elle s'affiche en haut de toutes les pages ; la supprimer la retire partout.
+- Véhicules : l'exploitant crée la liste (Espace exploitant -> Véhicules).
+  Chaque conducteur active les siens et saisit la plaque (page Véhicules).
+  L'exploitant les voit dans le profil de chaque conducteur.
+- Mot de passe provisoire (option cochée par défaut à la création et à la
+  réinitialisation d'un mot de passe) : une fenêtre affiche le message à
+  envoyer au conducteur (matricule + mot de passe provisoire), avec un bouton
+  « Copier le message ». Ce mot de passe n'est plus affiché une fois la
+  fenêtre fermée : pensez à le copier. À sa première connexion, le conducteur
+  doit définir son propre mot de passe ; tant qu'il ne l'a pas fait, son
+  espace reste bloqué. Le bouton « Générer » crée un mot de passe aléatoire.
+- Pseudos : chaque utilisateur modifie son pseudo Roblox et son Discord
+  depuis « Mon profil ».
+- Mode clair / sombre : bouton dans le menu, choix mémorisé dans le navigateur.
+- Suspendre : coupe la session en cours et bloque la connexion, données
+  conservées, réversible. Supprimer : efface le profil ET ses rapports
+  (irréversible, confirmation par saisie du matricule).
+- Vous ne pouvez ni suspendre ni supprimer votre propre compte.
+
+SÉCURITÉ (en place)
+===================
+- Mots de passe : scrypt + sel, 8 caractères minimum, jamais renvoyés.
+- Anti force brute : 5 échecs / 15 min par IP + matricule, 30 par IP.
+- Sessions signées (12 h), invalidées à la suspension, au changement de
+  mot de passe et au changement de rôle.
+- Politique CSP stricte (aucun script/style/police externe), HSTS,
+  anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy.
+- Réponses de l'API en Cache-Control: no-store.
+- Validation stricte de toutes les entrées (dates, horaires, longueurs,
+  lignes autorisées uniquement), plafond de 50 rapports / 24 h / conducteur.
+- Tests automatiques de l'API : npm install puis npm test.
+
+PERSONNALISATION
+================
+- Logos : public/img/lio-rouge.png (en-tête, connexion) et
+  public/img/lio-bleu.png (pied de page).
+- Couleurs : variables en haut de public/style.css (:root).

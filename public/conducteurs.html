@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Espace exploitant – Conducteurs</title>
+  <meta name="theme-color" content="#c10130">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preload" href="fonts/outfit-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="admin.html">
+      <img src="img/lio-rouge.png" alt="liO" width="325" height="181">
+      <span>Espace exploitant</span>
+    </a>
+    <nav id="nav" data-page="conducteurs"></nav>
+  </header>
+  <main class="page">
+
+    <!-- Vue liste -->
+    <div id="vueListe" class="vue">
+      <section class="card">
+        <div class="toolbar">
+          <h2>Conducteurs</h2>
+          <button type="button" id="bAjouter">Ajouter un compte</button>
+        </div>
+        <label class="search">Rechercher
+          <input type="search" id="q" placeholder="Matricule, nom ou prénom" maxlength="60" autocomplete="off">
+        </label>
+        <p id="nb" class="muted nb-resultats" role="status"></p>
+        <p id="msgListe" role="status"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Matricule</th><th>Nom</th><th>Prénom</th><th>Rôle</th><th>Statut</th><th>Heures ce mois</th><th>Heures cumulées</th><th></th></tr>
+            </thead>
+            <tbody id="uTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Vue profil -->
+    <div id="vueProfil" class="vue" hidden>
+      <a href="#" class="retour" id="retour">‹ Tous les conducteurs</a>
+
+      <section class="card hero">
+        <h2 id="pNom"></h2>
+        <p class="hero-meta" id="pMois"></p>
+        <div class="badges" id="pBadges"></div>
+        <div class="stats">
+          <div class="stat"><span id="pHeures">–</span><small>Heures ce mois-ci</small></div>
+          <div class="stat"><span id="pServices">–</span><small>Services ce mois-ci</small></div>
+          <div class="stat"><span id="pAccidents">–</span><small>Accidents ce mois-ci</small></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Gestion du compte</h3>
+        <p id="msgProfil" role="status"></p>
+        <div class="actions" id="actions">
+          <button type="button" class="ghost" id="bModifier">Modifier</button>
+          <button type="button" class="ghost" id="bSuspendre">Suspendre</button>
+          <button type="button" class="danger" id="bSupprimer">Supprimer le profil</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Cumul depuis le début</h3>
+        <div class="stats clair">
+          <div class="stat"><span id="cHeures">–</span><small>Heures de conduite</small></div>
+          <div class="stat"><span id="cServices">–</span><small>Services effectués</small></div>
+          <div class="stat"><span id="cAccidents">–</span><small>Accidents déclarés</small></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Les 3 derniers mois</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Mois</th><th>Services</th><th>Heures</th><th>Accidents</th></tr></thead>
+            <tbody id="pMoisBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Informations</h3>
+        <dl id="pInfos"></dl>
+      </section>
+
+      <section class="card">
+        <h3>Véhicules</h3>
+        <ul id="pVehicules" class="liste-vehicules"></ul>
+      </section>
+
+      <section class="card">
+        <h3>Lignes conduites (cumul)</h3>
+        <ul id="pLignes" class="liste-lignes"></ul>
+      </section>
+
+      <section class="card">
+        <h3>Derniers services</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Ligne</th><th>Horaires</th><th>Durée</th><th>Accident</th></tr></thead>
+            <tbody id="pRecents"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Fenêtre : ajout / modification -->
+  <dialog id="dlgForm" aria-labelledby="formTitre">
+    <h2 id="formTitre">Ajouter un compte</h2>
+    <form id="uForm">
+      <input type="hidden" name="uid">
+      <div class="row">
+        <label>Matricule <input name="matricule" required maxlength="30"></label>
+        <label>Nom <input name="nom" required maxlength="60"></label>
+      </div>
+      <div class="row">
+        <label>Prénom <input name="prenom" required maxlength="60"></label>
+        <label>Pseudo Roblox <input name="pseudo" maxlength="40"></label>
+      </div>
+      <div class="row">
+        <label>Pseudo Discord <input name="discord" maxlength="40"></label>
+        <label>Rôle
+          <select name="role">
+            <option value="conducteur">Conducteur</option>
+            <option value="exploitant">Exploitant</option>
+          </select>
+        </label>
+      </div>
+      <div class="champ-genere">
+        <label>Mot de passe <input type="password" name="password" maxlength="128" autocomplete="new-password"></label>
+        <button type="button" class="ghost" id="bGenerer" title="Créer un mot de passe aléatoire">Générer</button>
+      </div>
+      <label class="option-check">
+        <input type="checkbox" name="provisoire" checked>
+        <span>Mot de passe provisoire <small>le conducteur devra le remplacer à sa première connexion</small></span>
+      </label>
+      <p class="muted" id="aideMdp">8 caractères minimum.</p>
+      <p id="uMsg" class="error" role="alert"></p>
+      <div class="actions">
+        <button>Enregistrer</button>
+        <button type="button" class="ghost" id="fAnnuler">Annuler</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Fenêtre : message d'accès à transmettre au conducteur -->
+  <dialog id="dlgAcces" class="dlg-acces" aria-labelledby="accesTitre">
+    <button type="button" class="dlg-fermer" id="accesFermer" aria-label="Fermer la fenêtre">×</button>
+    <h2 id="accesTitre">Lio Aston - Accès Portail Conducteur</h2>
+    <p class="muted">Copiez ce message et envoyez-le au conducteur. Le mot de passe provisoire ne sera plus affiché une fois cette fenêtre fermée.</p>
+    <div id="accesTexte" class="message-acces"></div>
+    <div class="actions">
+      <button type="button" id="accesCopier">Copier le message</button>
+    </div>
+  </dialog>
+
+  <!-- Fenêtre : confirmation -->
+  <dialog id="dlgConfirm" aria-labelledby="confTitre">
+    <h2 id="confTitre"></h2>
+    <p id="confTexte"></p>
+    <label id="confSaisieWrap" hidden>
+      Pour confirmer, tapez le matricule <strong id="confMatricule"></strong>
+      <input id="confSaisie" autocomplete="off">
+    </label>
+    <div class="actions">
+      <button type="button" class="danger" id="confOk"></button>
+      <button type="button" class="ghost" id="confAnnuler">Annuler</button>
+    </div>
+  </dialog>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="img/lio-bleu.png" width="743" height="262" loading="lazy" decoding="async" alt="liO – Service public Occitanie Transports">
+      </div>
+      <div class="footer-text">
+        <h2>Informations légales</h2>
+        <ul>
+          <li><a href="mentions-legales.html#mentions">Mentions légales</a></li>
+          <li><a href="mentions-legales.html#donnees">Données personnelles</a></li>
+          <li><a href="mentions-legales.html#stockage">Cookies et stockage</a></li>
+          <li><a href="mentions-legales.html#cgu">Conditions générales d'utilisation</a></li>
+        </ul>
+        <p>Espace réservé aux conducteurs et exploitants de la communauté. Ce site est un projet de jeu de rôle sur Roblox : il n'est ni le site officiel du réseau liO, ni affilié à la Région Occitanie, à Occitanie Transports ou à Roblox Corporation.</p>
+        <p>Le nom et le logo liO appartiennent à leurs propriétaires et sont utilisés ici à titre illustratif.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Espace conducteurs. Tous droits réservés.</span>
+      <span>Hébergé par Netlify, Inc.</span>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+  <script src="js/conducteurs.js"></script>
+</body>
+</html>
